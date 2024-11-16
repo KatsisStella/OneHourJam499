@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace OneHourJam.Manager
@@ -106,7 +107,7 @@ namespace OneHourJam.Manager
                 }
             }
 
-            if (!_boxes.Any() && _amountLeft == 0) _victoryScreen.SetActive(true);
+            if (!_boxes.Any() && _amountLeft == 0) SceneManager.LoadScene("CG");
         }
 
         private IEnumerator GetPunched(SpriteRenderer s, Box b)
