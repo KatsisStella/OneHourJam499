@@ -1,4 +1,5 @@
 using OneHourJam.Map;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,16 +10,28 @@ namespace OneHourJam.Manager
     {
         public static GameManager Instance { private set; get; }
 
-        private List<Box> _boxes = new();
+        private readonly List<Box> _boxes = new();
+
+        private float _timeBeforeNextSpawn = 2f;
 
         private void Awake()
         {
             Instance = this;
+
+            StartCoroutine(SpawnBoxes());
         }
 
         public void Register(Box box)
         {
             _boxes.Add(box);
+        }
+
+        private IEnumerator SpawnBoxes()
+        {
+            while (_timeBeforeNextSpawn > .25f)
+            {
+                yield return new WaitForSeconds(_timeBeforeNextSpawn);
+            }
         }
 
         public void FightBoxes(Vector2Int v)
@@ -42,6 +55,17 @@ namespace OneHourJam.Manager
                     _boxes.RemoveAt(i);
                 }
             }
+        }
+        
+        // http://answers.unity.com/answers/502236/view.html
+        public static Bounds CalculateBounds(Camera cam)
+        {
+            float screenAspect = Screen.width / (float)Screen.height;
+            float cameraHeight = cam.orthographicSize * 2;
+            Bounds bounds = new(
+                cam.transform.position,
+                new Vector3(cameraHeight * screenAspect, cameraHeight, 0));
+            return bounds;
         }
 
         public void OnFightUp(InputAction.CallbackContext value)
