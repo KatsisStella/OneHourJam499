@@ -1,4 +1,3 @@
-using OneHourJam.Map;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,9 +9,12 @@ namespace OneHourJam.Manager
     {
         public static GameManager Instance { private set; get; }
 
-        private readonly List<Box> _boxes = new();
+        private readonly List<Transform> _boxes = new();
 
         private float _timeBeforeNextSpawn = 2f;
+
+        [SerializeField]
+        private GameObject _boxPrefab;
 
         private void Awake()
         {
@@ -21,17 +23,24 @@ namespace OneHourJam.Manager
             StartCoroutine(SpawnBoxes());
         }
 
-        public void Register(Box box)
+        private void Register(Transform box)
         {
             _boxes.Add(box);
         }
 
         private IEnumerator SpawnBoxes()
         {
+            var bounds = CalculateBounds(Camera.main);
             while (_timeBeforeNextSpawn > .25f)
             {
                 yield return new WaitForSeconds(_timeBeforeNextSpawn);
+                var go = Instantiate(_boxPrefab, new Vector3(Random.Range(bounds.min.x, bounds.max.x), Random.Range(bounds.min.y, bounds.max.y)), Quaternion.identity);
+                Register(go.transform);
+
+                _timeBeforeNextSpawn -= .5f;
             }
+
+            // You won
         }
 
         public void FightBoxes(Vector2Int v)
@@ -40,13 +49,13 @@ namespace OneHourJam.Manager
             {
                 var b = _boxes[i];
                 Vector2Int dir;
-                if (Mathf.Abs(b.transform.position.x) > Mathf.Abs(b.transform.position.y))
+                if (Mathf.Abs(b.position.x) > Mathf.Abs(b.position.y))
                 {
-                    dir = b.transform.position.x > 0f ? Vector2Int.right : Vector2Int.left;
+                    dir = b.position.x > 0f ? Vector2Int.right : Vector2Int.left;
                 }
                 else
                 {
-                    dir = b.transform.position.y > 0f ? Vector2Int.up : Vector2Int.down;
+                    dir = b.position.y > 0f ? Vector2Int.up : Vector2Int.down;
                 }
 
                 if (dir == v)
