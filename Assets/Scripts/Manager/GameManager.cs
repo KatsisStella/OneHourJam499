@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace OneHourJam.Manager
 {
@@ -15,6 +17,18 @@ namespace OneHourJam.Manager
 
         [SerializeField]
         private GameObject _boxPrefab;
+
+        [SerializeField]
+        private LevelInfo[] _levels;
+
+        [SerializeField]
+        private HandInfo[] _hands;
+
+        [SerializeField]
+        private Sprite _idleHand;
+
+        [SerializeField]
+        private Image _handImage;
 
         private void Awake()
         {
@@ -45,6 +59,7 @@ namespace OneHourJam.Manager
 
         public void FightBoxes(Vector2Int v)
         {
+            StartCoroutine(Punch(_hands.First(x => x.Direction == v).Punch));
             for (int i = _boxes.Count - 1; i >= 0; i--)
             {
                 var b = _boxes[i];
@@ -65,7 +80,15 @@ namespace OneHourJam.Manager
                 }
             }
         }
-        
+
+        private IEnumerator Punch(Sprite s)
+        {
+            _handImage.gameObject.SetActive(true);
+            _handImage.sprite = s;
+            yield return new WaitForSeconds(.25f);
+            _handImage.gameObject.SetActive(false);
+        }
+
         // http://answers.unity.com/answers/502236/view.html
         public static Bounds CalculateBounds(Camera cam)
         {
@@ -93,5 +116,24 @@ namespace OneHourJam.Manager
         {
             if (value.phase == InputActionPhase.Started) FightBoxes(Vector2Int.down);
         }
+    }
+
+    [System.Serializable]
+    public class HandInfo
+    {
+        public Sprite Punch;
+        public Vector2Int Direction;
+    }
+
+    [System.Serializable]
+    public class LevelInfo
+    {
+        public Box[] Sprites;
+    }
+
+    [System.Serializable]
+    public class Box
+    {
+        public Sprite Normal, Punched;
     }
 }
