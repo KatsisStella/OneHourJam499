@@ -628,8 +628,10 @@ MonoBehaviour:
   _boxPrefab: {fileID: 4366690023359848750, guid: 55bb114d2db8cc34e80a4a7d80162dd4, type: 3}
   _levels:
   - Sprites:
-    - Normal: {fileID: 5470638251573473006, guid: ff3bd7040a3574549ad8af8039c4145e, type: 3}
-      Punched: {fileID: -2563812578752130367, guid: 87419730fb7290b4bb3166282f3d260c, type: 3}
+    - Normal: {fileID: 21300000, guid: fa31d451437605f45ac0ec511ab48ca4, type: 3}
+      Punched: {fileID: 21300000, guid: 26a79f5dc5a69fd49b3fd75b56f8068c, type: 3}
+    - Normal: {fileID: 21300000, guid: ff3bd7040a3574549ad8af8039c4145e, type: 3}
+      Punched: {fileID: 21300000, guid: 87419730fb7290b4bb3166282f3d260c, type: 3}
   _hands:
   - Punch: {fileID: 21300000, guid: 5a4507affb3487941a2b93e976f7ade6, type: 3}
     Direction: {x: 1, y: 0}
