@@ -632,6 +632,9 @@ MonoBehaviour:
       Punched: {fileID: 21300000, guid: 26a79f5dc5a69fd49b3fd75b56f8068c, type: 3}
     - Normal: {fileID: 21300000, guid: ff3bd7040a3574549ad8af8039c4145e, type: 3}
       Punched: {fileID: 21300000, guid: 87419730fb7290b4bb3166282f3d260c, type: 3}
+  - Sprites:
+    - Normal: {fileID: 21300000, guid: ae95196b8b5ac7c4383a9743a7a1e52f, type: 3}
+      Punched: {fileID: 21300000, guid: 5f8d98c716a8a574797f69ad0e02fd2a, type: 3}
   _hands:
   - Punch: {fileID: 21300000, guid: 5a4507affb3487941a2b93e976f7ade6, type: 3}
     Direction: {x: 1, y: 0}
