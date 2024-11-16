@@ -32,6 +32,9 @@ namespace OneHourJam.Manager
         [SerializeField]
         private Image _handImage;
 
+        [SerializeField]
+        private GameObject _victoryScreen;
+
         private Camera _cam;
 
         private void Awake()
@@ -102,6 +105,8 @@ namespace OneHourJam.Manager
                     StartCoroutine(GetPunched(b.Item1, b.Item2));
                 }
             }
+
+            if (!_boxes.Any() && _amountLeft == 0) _victoryScreen.SetActive(true);
         }
 
         private IEnumerator GetPunched(SpriteRenderer s, Box b)
