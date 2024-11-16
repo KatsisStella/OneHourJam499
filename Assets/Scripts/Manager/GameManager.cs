@@ -94,6 +94,10 @@ namespace OneHourJam.Manager
         private IEnumerator GetPunched(SpriteRenderer s, Box b)
         {
             s.sprite = b.Punched;
+            yield return new WaitForSeconds(.1f);
+            s.enabled = false;
+            yield return new WaitForSeconds(.1f);
+            s.enabled = true;
             yield return new WaitForSeconds(.5f);
             Destroy(s.gameObject);
         }
