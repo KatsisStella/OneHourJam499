@@ -32,9 +32,12 @@ namespace OneHourJam.Manager
         [SerializeField]
         private Image _handImage;
 
+        private Camera _cam;
+
         private void Awake()
         {
             Instance = this;
+            _cam = Camera.main;
 
             StartCoroutine(SpawnBoxes());
         }
@@ -46,7 +49,7 @@ namespace OneHourJam.Manager
 
         private IEnumerator SpawnBoxes()
         {
-            var bounds = CalculateBounds(Camera.main);
+            var bounds = CalculateBounds(_cam);
             while (_amountLeft < 15)
             {
                 yield return new WaitForSeconds(_timeBeforeNextSpawn);
@@ -54,14 +57,23 @@ namespace OneHourJam.Manager
                 var sr = go.GetComponent<SpriteRenderer>();
 
                 var i = _amountLeft * (_levels.Length + 1) / 15;
-                if (i >= _levels.Length) i = _levels.Length - 1;
-                var b = _levels[i];
+                if (i >= _levels.Length - 1) i = _levels.Length - 1;
+                LevelInfo b;
+                try
+                {
+                    b = _levels[i];
+                }
+                catch (System.Exception e)
+                {
+                    b = _levels.Last();
+                }
                 var s = b.Sprites[Random.Range(0, b.Sprites.Length)];
                 sr.sprite = s.Normal;
 
                 Register(sr, s);
 
                 _timeBeforeNextSpawn -= .05f;
+                _amountLeft--;
             }
 
             // You won
@@ -69,12 +81,13 @@ namespace OneHourJam.Manager
 
         public void FightBoxes(Vector2Int v)
         {
+            var bounds = CalculateBounds(_cam);
             StartCoroutine(Punch(_hands.First(x => x.Direction == v).Punch));
             for (int i = _boxes.Count - 1; i >= 0; i--)
             {
                 var b = _boxes[i];
                 Vector2Int dir;
-                if (Mathf.Abs(b.Item1.transform.position.x) > Mathf.Abs(b.Item1.transform.position.y))
+                if (Mathf.Abs(b.Item1.transform.position.x) / bounds.max.x > Mathf.Abs(b.Item1.transform.position.y) / bounds.max.y)
                 {
                     dir = b.Item1.transform.position.x > 0f ? Vector2Int.right : Vector2Int.left;
                 }
@@ -94,6 +107,7 @@ namespace OneHourJam.Manager
         private IEnumerator GetPunched(SpriteRenderer s, Box b)
         {
             s.sprite = b.Punched;
+            s.gameObject.GetComponent<AAA>().IsDead = true;
             yield return new WaitForSeconds(.1f);
             s.enabled = false;
             yield return new WaitForSeconds(.1f);
