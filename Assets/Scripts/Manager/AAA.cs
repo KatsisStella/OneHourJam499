@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace OneHourJam.Manager
 {
-    public class Box : MonoBehaviour
+    public class AAA : MonoBehaviour
     {
         public bool IsDead;
 

@@ -107,7 +107,7 @@ namespace OneHourJam.Manager
         private IEnumerator GetPunched(SpriteRenderer s, Box b)
         {
             s.sprite = b.Punched;
-            s.gameObject.GetComponent<Box>().IsDead = true;
+            s.gameObject.GetComponent<AAA>().IsDead = true;
             yield return new WaitForSeconds(.1f);
             s.enabled = false;
             yield return new WaitForSeconds(.1f);
