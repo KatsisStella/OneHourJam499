@@ -11,9 +11,11 @@ namespace OneHourJam.Manager
     {
         public static GameManager Instance { private set; get; }
 
-        private readonly List<Transform> _boxes = new();
+        private readonly List<(SpriteRenderer, Box)> _boxes = new();
 
         private float _timeBeforeNextSpawn = 2f;
+
+        private int _amountLeft = 0;
 
         [SerializeField]
         private GameObject _boxPrefab;
@@ -37,21 +39,29 @@ namespace OneHourJam.Manager
             StartCoroutine(SpawnBoxes());
         }
 
-        private void Register(Transform box)
+        private void Register(SpriteRenderer sr, Box box)
         {
-            _boxes.Add(box);
+            _boxes.Add((sr, box));
         }
 
         private IEnumerator SpawnBoxes()
         {
             var bounds = CalculateBounds(Camera.main);
-            while (_timeBeforeNextSpawn > .25f)
+            while (_amountLeft < 15)
             {
                 yield return new WaitForSeconds(_timeBeforeNextSpawn);
                 var go = Instantiate(_boxPrefab, new Vector3(Random.Range(bounds.min.x, bounds.max.x), Random.Range(bounds.min.y, bounds.max.y)), Quaternion.identity);
-                Register(go.transform);
+                var sr = go.GetComponent<SpriteRenderer>();
 
-                _timeBeforeNextSpawn -= .5f;
+                var i = _amountLeft * (_levels.Length + 1) / 15;
+                if (i >= _levels.Length) i = _levels.Length - 1;
+                var b = _levels[i];
+                var s = b.Sprites[Random.Range(0, b.Sprites.Length)];
+                sr.sprite = s.Normal;
+
+                Register(sr, s);
+
+                _timeBeforeNextSpawn -= .05f;
             }
 
             // You won
@@ -64,21 +74,32 @@ namespace OneHourJam.Manager
             {
                 var b = _boxes[i];
                 Vector2Int dir;
-                if (Mathf.Abs(b.position.x) > Mathf.Abs(b.position.y))
+                if (Mathf.Abs(b.Item1.transform.position.x) > Mathf.Abs(b.Item1.transform.position.y))
                 {
-                    dir = b.position.x > 0f ? Vector2Int.right : Vector2Int.left;
+                    dir = b.Item1.transform.position.x > 0f ? Vector2Int.right : Vector2Int.left;
                 }
                 else
                 {
-                    dir = b.position.y > 0f ? Vector2Int.up : Vector2Int.down;
+                    dir = b.Item1.transform.position.y > 0f ? Vector2Int.up : Vector2Int.down;
                 }
 
                 if (dir == v)
                 {
-                    Destroy(b.gameObject);
                     _boxes.RemoveAt(i);
+                    StartCoroutine(GetPunched(b.Item1, b.Item2));
                 }
             }
+        }
+
+        private IEnumerator GetPunched(SpriteRenderer s, Box b)
+        {
+            s.sprite = b.Punched;
+            yield return new WaitForSeconds(.1f);
+            s.enabled = false;
+            yield return new WaitForSeconds(.1f);
+            s.enabled = true;
+            yield return new WaitForSeconds(.5f);
+            Destroy(s.gameObject);
         }
 
         private IEnumerator Punch(Sprite s)

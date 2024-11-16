@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 87419730fb7290b4bb3166282f3d260c
+guid: c06f4199c516f9047a24c1da8e5ab883
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2563812578752130367
-    second: ThetaPunched_0
+      213: -4919018733261639535
+    second: Glove-HookLeft_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ThetaPunched_0
+      name: Glove-HookLeft_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 167
         y: 0
-        width: 823
-        height: 785
+        width: 1246
+        height: 833
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1c21dc41b028b6cd0800000000000000
-      internalID: -2563812578752130367
+      spriteID: 190b27036822cbbb0800000000000000
+      internalID: -4919018733261639535
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ThetaPunched_0: -2563812578752130367
+      Glove-HookLeft_0: -4919018733261639535
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
